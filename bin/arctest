@@ -10,6 +10,5 @@ $failFast = isset($args["fail-fast"]);
 
 use ArcTest\ArcTest;
 
-// Later we'll add argument parsing
 $exitCode = ArcTest::run($path, $verbose, $failFast);
 exit($exitCode);
