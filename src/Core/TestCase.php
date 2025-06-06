@@ -12,6 +12,7 @@ use Exception;
 abstract class TestCase {
     private bool $skipped = false;
     private string $skipMessage = "";
+    private ?string $expectedException = null;
 
     /**
      * Marks the current test as skipped and sets a skip message.
@@ -50,6 +51,23 @@ abstract class TestCase {
      * @return void
      */
     public function tearDown(): void {}
+
+    /**
+     * Sets the expected exception for the next test execution.
+     * @param string $exception The name of the exception class that is expected to be thrown.
+     * @return void
+     */
+    public function expectException(string $exception): void {
+        $this->expectedException = $exception;
+    }
+
+    /**
+     * Retrieves the expected exception message.
+     * @return string|null The expected exception message.
+     */
+    public function getExpectedException(): ?string {
+        return $this->expectedException;
+    }
 
     /**
      * Asserts that a given condition is true. If the condition is false, an exception is thrown with the provided message.
@@ -129,6 +147,191 @@ abstract class TestCase {
     protected function assertNotNull(mixed $value, string $message = ""): void {
         if(!is_null($value)) {
             throw new Exception($message ?: "Failed asserting that value is not null.");
+        }
+    }
+
+    /**
+     * Asserts that a given value is empty.
+     * @param mixed $value The value to check for emptiness.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the provided value is not empty.
+     */
+    protected function assertEmpty(mixed $value, string $message = ""): void {
+        if(!empty($value)) {
+            throw new Exception($message ?: "Failed asserting that value is empty.");
+        }
+    }
+
+    /**
+     * Asserts that a value is not empty.
+     * @param mixed $value The value to check for emptiness.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the provided value is empty.
+     */
+    protected function assertNotEmpty(mixed $value, string $message = ""): void {
+        if(empty($value)) {
+            throw new Exception($message ?: "Failed asserting that value is not empty.");
+        }
+    }
+
+    /**
+     * Asserts that a string contains another string.
+     * @param string $needle The substring to search for within the haystack.
+     * @param string $haystack The string to search within.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the needle string is not found within the haystack string.
+     */
+    protected function assertStringContains(string $needle, string $haystack, string $message = ""): void {
+        if(!str_contains($haystack, $needle)) {
+            throw new Exception($message ?: "Failed asserting that string contains [{$needle}] in [{$haystack}].");
+        }
+    }
+
+    /**
+     * Asserts that a string starts with a specific prefix.
+     * @param string $prefix The prefix to check for at the start of the string.
+     * @param string $string The string to check against for the specified prefix.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the string does not start with the specified prefix.
+     */
+    protected function assertStringStartsWith(string $prefix, string $string, string $message = ""): void {
+        if(!str_starts_with($string, $prefix)) {
+            throw new Exception($message ?: "Failed asserting that string contains [{$prefix}] in [{$string}].");
+        }
+    }
+
+    /**
+     * Asserts that a string ends with a specified suffix.
+     * @param string $suffix The expected suffix to check at the end of the string.
+     * @param string $string The actual string value to check for the suffix.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the string does not end with the specified suffix.
+     */
+    protected function assertStringEndsWith(string $suffix, string $string, string $message = ""): void {
+        if(!str_ends_with($string, $suffix)) {
+            throw new Exception($message ?: "Failed asserting that string ends with [{$suffix}] in [{$string}].");
+        }
+    }
+
+    /**
+     * Asserts that a value is a string.
+     * @param mixed $value The value to check if it is a string.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the value is not a string.
+     */
+    protected function assertIsString(mixed $value, string $message = ""): void {
+        if(!is_string($value)) {
+            throw new Exception($message ?: "Failed asserting that value is of type string.");
+        }
+    }
+
+    /**
+     * Asserts that the given value is an integer.
+     * @param mixed $value The value to be checked if it is an integer.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the provided value is not an integer.
+     */
+    protected function assertIsInt(mixed $value, string $message = ""): void {
+        if(!is_int($value)) {
+            throw new Exception($message ?: "Failed asserting that value is of type int.");
+        }
+    }
+
+    /**
+     * Asserts that a value is of type float.
+     * @param mixed $value The value to check if it is a float.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the provided value is not of type float.
+     */
+    protected function assertIsFloat(mixed $value, string $message = ""): void {
+        if(!is_float($value)) {
+            throw new Exception($message ?: "Failed asserting that value is of type float.");
+        }
+    }
+
+    /**
+     * Asserts that a given value is an array.
+     * @param mixed $value The value to be checked if it is an array.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the given value is not an array.
+     */
+    protected function assertIsArray(mixed $value, string $message = ""): void {
+        if(!is_array($value)) {
+            throw new Exception($message ?: "Failed asserting that value is of type array.");
+        }
+    }
+
+    /**
+     * Asserts that a value is an object.
+     * @param mixed $value The value to check if it is an object.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the given value is not an object.
+     */
+    protected function assertIsObject(mixed $value, string $message = ""): void {
+        if(!is_object($value)) {
+            throw new Exception($message ?: "Failed asserting that value is of type object.");
+        }
+    }
+
+    /**
+     * Asserts that a value is of type boolean.
+     * @param mixed $value The value to check for boolean type.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the provided value is not of type boolean.
+     */
+    protected function assertIsBool(mixed $value, string $message = ""): void {
+        if(!is_bool($value)) {
+            throw new Exception($message ?: "Failed asserting that value is of type boolean.");
+        }
+    }
+
+    /**
+     * Asserts that a value is callable.
+     * @param mixed $value The value to check if it is callable.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the provided value is not callable.
+     */
+    protected function assertIsCallable(mixed $value, string $message = ""): void {
+        if(!is_callable($value)) {
+            throw new Exception($message ?: "Failed asserting that value is callable.");
+        }
+    }
+
+    /**
+     * Asserts that a value is iterable.
+     * @param mixed $value The value to check if it is iterable.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the provided value is not iterable.
+     */
+    protected function assertIsIterable(mixed $value, string $message = ""): void {
+        if(!is_iterable($value)) {
+            throw new Exception($message ?: "Failed asserting that value is iterable.");
+        }
+    }
+
+    /**
+     * Asserts that a given value is a resource.
+     * @param mixed $value The value to check if it is a resource.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws Exception If the provided value is not a resource.
+     */
+    protected function assertIsResource(mixed $value, string $message = ""): void {
+        if(!is_resource($value)) {
+            throw new Exception($message ?: "Failed asserting that value is resource.");
         }
     }
 }

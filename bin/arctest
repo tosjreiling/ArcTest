@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$args = getopt("", ["path::", "verbose", "fail-fast"]);
+$path = $args["path"] ?? (__DIR__ . "/../tests");
+$verbose = isset($args["verbose"]);
+$failFast = isset($args["fail-fast"]);
+
+use ArcTest\ArcTest;
+
+// Later we'll add argument parsing
+$exitCode = ArcTest::run($path, $verbose, $failFast);
+exit($exitCode);

@@ -23,16 +23,18 @@ class ArcTest {
     }
 
     /**
-     * Executes the test runner with a suite of tests.
-     * @param string $directory The directory to discover tests from if no tests are explicitly added. Defaults to ../../tests relative to the script.
-     * @return void
+     * Runs the test suite in the specified directory.
+     * @param string $directory The directory containing the tests to run.
+     * @param bool $verbose (optional) Whether to display detailed output. Default is false.
+     * @param bool $failFast (optional) Whether to stop running tests on the first failure. Default is false.
+     * @return int
      * @throws ReflectionException
      */
-    public static function run(string $directory = __DIR__ . "/../../tests"): void {
+    public static function run(string $directory, bool $verbose = false, bool $failFast = false): int {
         $suite = new TestSuite();
 
-        if(!empty(self::$tests)) {
-            foreach(self::$tests as $test) {
+        if (!empty(self::$tests)) {
+            foreach (self::$tests as $test) {
                 $suite->add($test);
             }
         } else {
@@ -40,6 +42,6 @@ class ArcTest {
         }
 
         $runner = new TestRunner();
-        $runner->run($suite);
+        return $runner->run($suite, $verbose, $failFast);
     }
 }
