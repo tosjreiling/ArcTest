@@ -2,6 +2,8 @@
 
 namespace ArcTest\Core;
 
+use ArcTest\Contracts\ResultPrinterInterface;
+use ArcTest\Enum\TestOutcome;
 use JetBrains\PhpStorm\NoReturn;
 use Throwable;
 
@@ -10,6 +12,17 @@ use Throwable;
  * and displaying the results to the console.
  */
 class TestRunner {
+    private ResultPrinterInterface $printer;
+
+    /**
+     * Constructor for initializing the test suite with a ResultPrinterInterface instance
+     * @param ResultPrinterInterface $printer The ResultPrinterInterface instance to handle result printing
+     * @return void
+     */
+    public function __construct(ResultPrinterInterface $printer) {
+        $this->printer = $printer;
+    }
+
     /**
      * Run the test suite with optional parameters for verbosity and fast failure
      * @param TestSuite $suite The test suite to be run
@@ -18,10 +31,7 @@ class TestRunner {
      * @return int
      */
     public function run(TestSuite $suite, bool $verbose = false, bool $failFast = false): int {
-        echo PHP_EOL;
-        echo "Running tests..." . PHP_EOL;
-        echo PHP_EOL;
-
+        $this->printer->start();
         $result = new TestResult();
 
         foreach($suite->getClasses() as $className) {
@@ -38,29 +48,28 @@ class TestRunner {
 
                         if($testInstance->getExpectedException() !== null) {
                             $result->incrementFailed();
-                            echo "FAILED: {$className}::{$method} - Expected exception {$testInstance->getExpectedException()} was not thrown" . PHP_EOL;
+                            $this->printer->printTestResult($className, $method, TestOutcome::FAILED, "Expected exception {$testInstance->getExpectedException()} was not thrown");
                             if($failFast){
-                                $this->print($result);
+                                $this->printer->printSummary($result);
                                 return 1;
                             }
                         } else if($testInstance->isSkipped()) {
                             $result->incrementSkipped();
-                            echo "SKIPPED: {$className}::{$method} ({$testInstance->getSkipMessage()})" . PHP_EOL;
+                            $this->printer->printTestResult($className, $method, TestOutcome::SKIPPED, $testInstance->getSkipMessage());
                         }  else {
                             $result->incrementPassed();
-                            echo "PASSED: {$className}::{$method}" . PHP_EOL;
+                            $this->printer->printTestResult($className, $method, TestOutcome::PASSED);
                         }
                     } catch (Throwable $e) {
                         if($testInstance->getExpectedException() !== null && is_a($e, $testInstance->getExpectedException())) {
                             $result->incrementPassed();
-                            echo "PASSED: {$className}::{$method} (expected exception {$testInstance->getExpectedException()})" . PHP_EOL;
+                            $this->printer->printTestResult($className, $method, TestOutcome::PASSED, "(expected exception {$testInstance->getExpectedException()})");
                         } else {
                             $result->incrementFailed();
-                            echo "FAILED: {$className}::{$method} - {$e->getMessage()}" . PHP_EOL;
+                            $this->printer->printTestResult($className, $method, TestOutcome::FAILED, $e->getMessage(), $e);
 
-                            if($verbose) echo $e->getTraceAsString() . PHP_EOL;
                             if($failFast){
-                                $this->print($result);
+                                $this->printer->printSummary($result);
                                 return 1;
                             }
                         }
@@ -71,19 +80,7 @@ class TestRunner {
             }
         }
 
-        $this->print($result);
+        $this->printer->printSummary($result);
         return $result->hasFailures() ? 1 : 0;
-    }
-
-    /**
-     * Print the summary of the test run with total, passed, failed, and skipped counts
-     * @param TestResult $result The TestResult object containing test run data
-     */
-    private function print(TestResult $result): void {
-        echo PHP_EOL;
-        echo "Test run completed!" . PHP_EOL;
-        echo PHP_EOL;
-        echo "Summary:" . PHP_EOL;
-        echo "Total: {$result->getTotal()} | Passed: {$result->getPassed()} | Failed: {$result->getFailed()} | Skipped: {$result->getSkipped()}" . PHP_EOL;
     }
 }

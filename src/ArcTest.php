@@ -5,6 +5,7 @@ namespace ArcTest;
 use ArcTest\Core\TestRunner;
 use ArcTest\Core\TestSuite;
 
+use ArcTest\Printer\ConsolePrinter;
 use ReflectionException;
 
 /**
@@ -41,7 +42,8 @@ class ArcTest {
             $suite->discover($directory);
         }
 
-        $runner = new TestRunner();
+        $printer = new ConsolePrinter($verbose);
+        $runner = new TestRunner($printer);
         return $runner->run($suite, $verbose, $failFast);
     }
 }
