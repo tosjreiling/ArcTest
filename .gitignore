@@ -1,0 +1,41 @@
+# Ignore vendor folder (Composer dependencies)
+vendor/
+
+# Ignore Composer PHAR file if present
+composer.phar
+
+# Ignore IDE-specific files (PHPStorm, etc.)
+.idea/
+*.iml
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and cache
+*.log
+cache/
+tmp/
+
+# Ignore PHPUnit test results
+.phpunit.result.cache
+
+# Ignore user-defined local config
+.env
+.env.local
+.env.*.local
+
+# Ignore build artifacts
+/build/
+/dist/
+
+# Ignore coverage reports
+coverage/
+
+# Ignore node_modules if using frontend build tools
+node_modules/
+
+# Ignore lockfiles for frontend tools (optional)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

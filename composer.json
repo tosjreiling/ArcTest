@@ -1,0 +1,25 @@
+{
+    "name": "arc/test",
+    "description": "Testing framework for the Arc Suite.",
+    "version": "1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "ArcTest\\": "src/",
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Tosj Reiling",
+            "email": "t.reiling@alternate.be"
+        }
+    ],
+    "require": {
+        "php": ">=8.2"
+    },
+    "bin": [
+        "bin/arctest"
+    ]
+}
