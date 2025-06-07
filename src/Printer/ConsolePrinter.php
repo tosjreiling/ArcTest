@@ -35,7 +35,7 @@ class ConsolePrinter implements ResultPrinterInterface {
                 break;
             case TestOutcome::SKIPPED:
                 echo "SKIPPED: {$result->className}::{$result->method}";
-                if(!empty($result->message)) echo "({$result->message})";
+                if(!empty($result->message)) echo " ({$result->message})";
                 echo PHP_EOL;
                 break;
             case TestOutcome::FAILED:

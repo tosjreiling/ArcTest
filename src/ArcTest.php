@@ -28,15 +28,17 @@ class ArcTest {
     }
 
     /**
-     * Executes the test suite in the specified directory.
-     * @param string $directory The directory to discover and execute tests.
-     * @param bool $verbose Optional. Whether to enable verbose output. Default is false.
-     * @param bool $failFast Optional. Whether to stop execution upon the first test failure. Default is false.
-     * @param PrintFormat $format The format in which test results should be printed. Default is PrintFormat::CONSOLE.
-     * @return int The number of test failures encountered during execution.
+     * Run the test suite.
+     * @param string $directory The directory to search for tests.
+     * @param bool $verbose (optional) Whether to display verbose output. Default is false.
+     * @param bool $failFast (optional) Whether to stop execution on first failure. Default is false.
+     * @param PrintFormat $format (optional) The format to use for printing test results. Default is PrintFormat::CONSOLE.
+     * @param string $filter (optional) A filter to apply on the discovered tests. Default is an empty string.
+     * @param array $groups (optional) Groups to run tests from. Default is an empty array.
+     * @return int The exit code of the test execution.
      * @throws ReflectionException
      */
-    public static function run(string $directory, bool $verbose = false, bool $failFast = false, PrintFormat $format = PrintFormat::CONSOLE, string $filter = ""): int {
+    public static function run(string $directory, bool $verbose = false, bool $failFast = false, PrintFormat $format = PrintFormat::CONSOLE, string $filter = "", array $groups = []): int {
         $suite = new TestSuite();
 
         if (!empty(self::$tests)) {
@@ -49,7 +51,7 @@ class ArcTest {
 
         $printer = self::resolvePrinter($format, $verbose);
         $runner = new TestRunner($printer);
-        return $runner->run($suite, $verbose, $failFast, $filter);
+        return $runner->run($suite, $verbose, $failFast, $filter, $groups);
     }
 
     /**

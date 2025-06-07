@@ -2,6 +2,7 @@
 
 namespace ArcTest\Core;
 
+use ArcTest\Exceptions\SkipTestException;
 use Exception;
 
 /**
@@ -15,13 +16,13 @@ abstract class TestCase {
     private ?string $expectedException = null;
 
     /**
-     * Marks the current test as skipped and sets a skip message.
-     * @param string $message The message explaining why the test is skipped. Defaults to "Test skipped".
+     * Skips the test.
+     * @param string $message An optional message to display when skipping the test
      * @return void
+     * @throws SkipTestException indicating that the test has been skipped
      */
     public function skip(string $message = "Test skipped"): void {
-        $this->skipped = true;
-        $this->skipMessage = $message;
+        throw new SkipTestException($message);
     }
 
     /**

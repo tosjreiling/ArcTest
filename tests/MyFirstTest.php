@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use ArcTest\Attributes\Group;
 use ArcTest\Core\TestCase;
 use InvalidArgumentException;
 
@@ -50,6 +51,14 @@ class MyFirstTest extends TestCase {
         $this->assertIsIterable([1, 2, 3]);
     }
 
+    public function testConditionalSkip(): void {
+        if(!extension_loaded("pcntl")) {
+            $this->skip("PCNTL extension not loaded");
+        }
+
+        $this->assertTrue(true);
+    }
+
     public function testExceptionAssertions(): void {
         $this->expectException(InvalidArgumentException::class);
         throw new InvalidArgumentException("Something went wrong");
@@ -60,6 +69,11 @@ class MyFirstTest extends TestCase {
     }
 
     public function testShouldNotRun(): void {
+        $this->assertTrue(true);
+    }
+
+    #[Group("integration")]
+    public function testGroupAttribute(): void {
         $this->assertTrue(true);
     }
 }
