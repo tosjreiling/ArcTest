@@ -36,7 +36,7 @@ class ArcTest {
      * @return int The number of test failures encountered during execution.
      * @throws ReflectionException
      */
-    public static function run(string $directory, bool $verbose = false, bool $failFast = false, PrintFormat $format = PrintFormat::CONSOLE): int {
+    public static function run(string $directory, bool $verbose = false, bool $failFast = false, PrintFormat $format = PrintFormat::CONSOLE, string $filter = ""): int {
         $suite = new TestSuite();
 
         if (!empty(self::$tests)) {
@@ -44,12 +44,12 @@ class ArcTest {
                 $suite->add($test);
             }
         } else {
-            $suite->discover($directory);
+            $suite->discover($directory, $filter);
         }
 
         $printer = self::resolvePrinter($format, $verbose);
         $runner = new TestRunner($printer);
-        return $runner->run($suite, $verbose, $failFast);
+        return $runner->run($suite, $verbose, $failFast, $filter);
     }
 
     /**

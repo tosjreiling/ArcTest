@@ -6,11 +6,12 @@ use ArcTest\Enum\PrintFormat;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$args = getopt("", ["path::", "verbose", "fail-fast", "format::"]);
+$args = getopt("", ["path::", "verbose", "fail-fast", "format::", "filter::"]);
 $path = $args["path"] ?? (__DIR__ . "/../tests");
 $verbose = isset($args["verbose"]);
 $failFast = isset($args["fail-fast"]);
 $formatValue = $args["format"] ?? "console";
+$filter = $args["filter"] ?? "";
 
 try {
     $format = PrintFormat::from($formatValue);
@@ -20,5 +21,5 @@ try {
     exit(1);
 }
 
-$exitCode = ArcTest::run($path, $verbose, $failFast, $format);
+$exitCode = ArcTest::run($path, $verbose, $failFast, $format, $filter);
 exit($exitCode);

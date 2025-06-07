@@ -5,6 +5,7 @@ namespace ArcTest\Core;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionMethod;
 
 /**
  * Represents a test suite that manages a collection of classes and provides functionality
@@ -23,24 +24,43 @@ class TestSuite {
     }
 
     /**
-     * Discovers and includes all PHP files within a specified directory and its subdirectories.
-     * @param string $directory The directory to search for PHP files.
+     * Discovers test classes within a directory and adds them to the test suite.
+     * @param string $directory The directory to search for test classes.
+     * @param string $filter A filter to restrict the test classes to specific names.
      * @return void
+     * @throws InvalidArgumentException If the provided directory does not exist.
      * @throws ReflectionException
      */
-    public function discover(string $directory): void {
+    public function discover(string $directory, string $filter = ""): void {
         $files = $this->scan($directory);
 
-        foreach($files as $file) {
-            require_once $file;
-        }
+        foreach($files as $file) require_once $file;
 
         foreach(get_declared_classes() as $class) {
-            if(is_subclass_of($class, TestCase::class)) {
-                $reflection = new ReflectionClass($class);
-                if(!$reflection->isAbstract() && !$reflection->isInterface()) {
+            if(!is_subclass_of($class, TestCase::class)) continue;
+
+            $reflection = new ReflectionClass($class);
+            if($reflection->isAbstract() && !$reflection->isInterface()) continue;
+
+            if(!empty($filter)) {
+                if(str_contains($class, $filter)) {
                     $this->add($class);
+                    continue;
                 }
+
+                $methods = get_class_methods($class);
+                $match = false;
+
+                foreach ($methods as $method) {
+                    if (str_starts_with($method, "test") && str_contains($method, $filter)) {
+                        $match = true;
+                        break;
+                    }
+                }
+
+                if ($match) $this->add($class);
+            } else {
+                $this->add($class);
             }
         }
     }

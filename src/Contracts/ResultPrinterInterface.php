@@ -3,8 +3,7 @@
 namespace ArcTest\Contracts;
 
 use ArcTest\Core\TestResult;
-use ArcTest\Enum\TestOutcome;
-use Throwable;
+use ArcTest\Core\TestSummary;
 
 interface ResultPrinterInterface {
     /**
@@ -14,20 +13,16 @@ interface ResultPrinterInterface {
     public function start(): void;
 
     /**
-     * Print the test result for a specific test case.
-     * @param string $className The name of the test class.
-     * @param string $methodName The name of the test method.
-     * @param TestOutcome $outcome The outcome of the test (e.g., Pass, Fail).
-     * @param string $message Additional message to provide more details about the test result (optional).
-     * @param Throwable|null $exception
+     * Prints the details of the test result.
+     * @param TestResult $result The test result object to be printed
      * @return void
      */
-    public function printTestResult(string $className, string $methodName, TestOutcome $outcome, string $message = "", Throwable $exception = null): void;
+    public function printTestResult(TestResult $result): void;
 
     /**
      * Prints the summary of the test result.
-     * @param TestResult $result The test result object to be summarized
+     * @param TestSummary $summary The test result object to be summarized
      * @return void
      */
-    public function printSummary(TestResult $result): void;
+    public function printSummary(TestSummary $summary): void;
 }
