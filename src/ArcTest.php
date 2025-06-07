@@ -2,10 +2,14 @@
 
 namespace ArcTest;
 
+use ArcTest\Contracts\ResultPrinterInterface;
 use ArcTest\Core\TestRunner;
 use ArcTest\Core\TestSuite;
 
+use ArcTest\Enum\PrintFormat;
 use ArcTest\Printer\ConsolePrinter;
+use ArcTest\Printer\JsonPrinter;
+use Exception;
 use ReflectionException;
 
 /**
@@ -24,14 +28,15 @@ class ArcTest {
     }
 
     /**
-     * Runs the test suite in the specified directory.
-     * @param string $directory The directory containing the tests to run.
-     * @param bool $verbose (optional) Whether to display detailed output. Default is false.
-     * @param bool $failFast (optional) Whether to stop running tests on the first failure. Default is false.
-     * @return int
+     * Executes the test suite in the specified directory.
+     * @param string $directory The directory to discover and execute tests.
+     * @param bool $verbose Optional. Whether to enable verbose output. Default is false.
+     * @param bool $failFast Optional. Whether to stop execution upon the first test failure. Default is false.
+     * @param PrintFormat $format The format in which test results should be printed. Default is PrintFormat::CONSOLE.
+     * @return int The number of test failures encountered during execution.
      * @throws ReflectionException
      */
-    public static function run(string $directory, bool $verbose = false, bool $failFast = false): int {
+    public static function run(string $directory, bool $verbose = false, bool $failFast = false, PrintFormat $format = PrintFormat::CONSOLE): int {
         $suite = new TestSuite();
 
         if (!empty(self::$tests)) {
@@ -42,8 +47,21 @@ class ArcTest {
             $suite->discover($directory);
         }
 
-        $printer = new ConsolePrinter($verbose);
+        $printer = self::resolvePrinter($format, $verbose);
         $runner = new TestRunner($printer);
         return $runner->run($suite, $verbose, $failFast);
+    }
+
+    /**
+     * Resolves and creates the appropriate printer instance based on the specified format.
+     * @param PrintFormat $format The format in which test results should be printed.
+     * @param bool $verbose Whether to enable verbose output in the console printer.
+     * @return ResultPrinterInterface An instance of the printer corresponding to the specified format.
+     */
+    private static function resolvePrinter(PrintFormat $format, bool $verbose): ResultPrinterInterface {
+        return match($format) {
+            PrintFormat::CONSOLE => new ConsolePrinter($verbose),
+            PrintFormat::JSON => new JsonPrinter()
+        };
     }
 }

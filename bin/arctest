@@ -1,14 +1,24 @@
 #!/usr/bin/env php
 <?php
 
+use ArcTest\ArcTest;
+use ArcTest\Enum\PrintFormat;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$args = getopt("", ["path::", "verbose", "fail-fast"]);
+$args = getopt("", ["path::", "verbose", "fail-fast", "format::"]);
 $path = $args["path"] ?? (__DIR__ . "/../tests");
 $verbose = isset($args["verbose"]);
 $failFast = isset($args["fail-fast"]);
+$formatValue = $args["format"] ?? "console";
 
-use ArcTest\ArcTest;
+try {
+    $format = PrintFormat::from($formatValue);
+} catch (ValueError $e) {
+    echo "Invalid format: '{$formatValue}'. Allowed values: ";
+    echo implode(", ", array_map(fn($f) => $f->value, PrintFormat::cases())) . PHP_EOL;
+    exit(1);
+}
 
-$exitCode = ArcTest::run($path, $verbose, $failFast);
+$exitCode = ArcTest::run($path, $verbose, $failFast, $format);
 exit($exitCode);

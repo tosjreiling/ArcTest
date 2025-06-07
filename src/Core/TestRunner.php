@@ -4,7 +4,6 @@ namespace ArcTest\Core;
 
 use ArcTest\Contracts\ResultPrinterInterface;
 use ArcTest\Enum\TestOutcome;
-use JetBrains\PhpStorm\NoReturn;
 use Throwable;
 
 /**
