@@ -6,6 +6,7 @@ use ArcTest\Contracts\ResultPrinterInterface;
 use ArcTest\Core\TestResult;
 use ArcTest\Core\TestSummary;
 use ArcTest\Enum\TestOutcome;
+use ArcTest\Exceptions\AssertionFailedException;
 use Throwable;
 
 class JsonPrinter implements ResultPrinterInterface {
@@ -23,14 +24,27 @@ class JsonPrinter implements ResultPrinterInterface {
      * @return void
      */
     #[\Override] public function printTestResult(TestResult $result): void {
-        $this->results[] = [
+        $record[] = [
             "class" => $result->className,
             "method" => $result->method,
             "outcome" => $result->outcome->value,
             "message" => $result->message,
-            "exception" => $result->exception->getMessage(),
-            "trace" => $result->exception->getTraceAsString()
+            "exception" => null,
+            "trace" => null,
+            "expected" => null,
+            "actual" => null
         ];
+
+        if($result->exception instanceof AssertionFailedException) {
+            $record["expected"] = $result->exception->getExpected();
+            $record["actual"] = $result->exception->getActual();
+            $record["message"] = $result->exception->getMessage();
+        } elseif($result->exception instanceof Throwable) {
+            $record["exception"] = $result->exception->getMessage();
+            $record["trace"] = $result->exception->getTraceAsString();
+        }
+
+        $this->results[] = $record;
     }
 
     /**

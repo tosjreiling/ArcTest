@@ -6,6 +6,7 @@ use ArcTest\Contracts\ResultPrinterInterface;
 use ArcTest\Core\TestResult;
 use ArcTest\Core\TestSummary;
 use ArcTest\Enum\TestOutcome;
+use ArcTest\Exceptions\AssertionFailedException;
 use Throwable;
 
 class ConsolePrinter implements ResultPrinterInterface {
@@ -40,9 +41,17 @@ class ConsolePrinter implements ResultPrinterInterface {
                 break;
             case TestOutcome::FAILED:
                 echo "FAILED: {$result->className}::{$result->method}";
-                if(!empty($result->message)) echo " - {$result->message}";
-                echo PHP_EOL;
-                if($this->verbose) echo $result->exception->getTraceAsString() . PHP_EOL;
+
+                if($result->exception instanceof AssertionFailedException) {
+                    echo " Expected: " . var_export($result->exception->getExpected(), true) . " => Actual: " . var_export($result->exception->getActual(), true) . PHP_EOL;
+                } else if(!empty($result->message)) {
+                    echo " Message: {$result->message}" . PHP_EOL;
+                }
+
+                if($this->verbose && $result->exception instanceof Throwable) {
+                    echo $result->exception->getTraceAsString() . PHP_EOL;
+                }
+
                 break;
         }
     }

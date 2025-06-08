@@ -5,6 +5,7 @@ namespace ArcTest\Core;
 use ArcTest\Attributes\Group;
 use ArcTest\Contracts\ResultPrinterInterface;
 use ArcTest\Enum\TestOutcome;
+use ArcTest\Exceptions\AssertionFailedException;
 use ArcTest\Exceptions\SkipTestException;
 use ReflectionException;
 use ReflectionMethod;
@@ -55,8 +56,8 @@ class TestRunner {
                     $testInstance->setUp();
                     $testInstance->$method();
 
+                    $summary->incrementTotal();
                     if ($testInstance->getExpectedException() !== null) {
-                        $summary->incrementTotal();
                         $summary->incrementFailed();
 
                         $result = new TestResult($className, $method, TestOutcome::FAILED, "Expected exception {$testInstance->getExpectedException()} was not thrown");
@@ -68,7 +69,6 @@ class TestRunner {
                             return 1;
                         }
                     } else {
-                        $summary->incrementTotal();
                         $summary->incrementPassed();
 
                         $result = new TestResult($className, $method, TestOutcome::PASSED);
@@ -82,16 +82,27 @@ class TestRunner {
                     $result = new TestResult($className, $method, TestOutcome::SKIPPED, $e->getMessage());
                     $results->add($result);
                     $this->printer->printTestResult($result);
+                } catch (AssertionFailedException $e) {
+                    $summary->incrementTotal();
+                    $summary->incrementFailed();
+
+                    $result = new TestResult($className, $method, TestOutcome::FAILED, $e->getMessage(), $e);
+                    $results->add($result);
+                    $this->printer->printTestResult($result);
+
+                    if($failFast) {
+                        $this->printer->printSummary($summary);
+                        return 1;
+                    }
                 } catch (Throwable $e) {
+                    $summary->incrementTotal();
                     if($testInstance->getExpectedException() !== null && is_a($e, $testInstance->getExpectedException())) {
-                        $summary->incrementTotal();
                         $summary->incrementPassed();
 
                         $result = new TestResult($className, $method, TestOutcome::PASSED, "(expected exception {$testInstance->getExpectedException()})");
                         $results->add($result);
                         $this->printer->printTestResult($result);
                     } else {
-                        $summary->incrementTotal();
                         $summary->incrementFailed();
 
                         $result = new TestResult($className, $method, TestOutcome::FAILED, $e->getMessage(), $e);
