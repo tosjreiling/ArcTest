@@ -2,9 +2,9 @@
 
 namespace ArcTest\Core;
 
+use ArcTest\Enum\AssertType;
 use ArcTest\Exceptions\AssertionFailedException;
 use ArcTest\Exceptions\SkipTestException;
-use Exception;
 
 /**
  * Abstract class representing a test case structure.
@@ -228,9 +228,7 @@ abstract class TestCase {
      * @throws AssertionFailedException If the value is not a string.
      */
     protected function assertIsString(mixed $value, string $message = ""): void {
-        if(!is_string($value)) {
-            throw new AssertionFailedException("string", gettype($value), $message ?: "Failed asserting that value is not string.");
-        }
+        $this->assertType(AssertType::IS_STRING, $value, $message);
     }
 
     /**
@@ -241,9 +239,7 @@ abstract class TestCase {
      * @throws AssertionFailedException If the provided value is not an integer.
      */
     protected function assertIsInt(mixed $value, string $message = ""): void {
-        if(!is_int($value)) {
-            throw new AssertionFailedException("int", gettype($value), $message ?: "Failed asserting that value is not int.");
-        }
+        $this->assertType(AssertType::IS_INT, $value, $message);
     }
 
     /**
@@ -254,9 +250,7 @@ abstract class TestCase {
      * @throws AssertionFailedException If the provided value is not of type float.
      */
     protected function assertIsFloat(mixed $value, string $message = ""): void {
-        if(!is_float($value)) {
-            throw new AssertionFailedException("float", gettype($value), $message ?: "Failed asserting that value is float.");
-        }
+        $this->assertType(AssertType::IS_FLOAT, $value, $message);
     }
 
     /**
@@ -267,9 +261,7 @@ abstract class TestCase {
      * @throws AssertionFailedException If the given value is not an array.
      */
     protected function assertIsArray(mixed $value, string $message = ""): void {
-        if(!is_array($value)) {
-            throw new AssertionFailedException("array", gettype($value), $message ?: "Failed asserting that value is not array.");
-        }
+        $this->assertType(AssertType::IS_ARRAY, $value, $message);
     }
 
     /**
@@ -280,9 +272,7 @@ abstract class TestCase {
      * @throws AssertionFailedException If the given value is not an object.
      */
     protected function assertIsObject(mixed $value, string $message = ""): void {
-        if(!is_object($value)) {
-            throw new AssertionFailedException("object", gettype($value), $message ?: "Failed asserting that value is not object.");
-        }
+        $this->assertType(AssertType::IS_OBJECT, $value, $message);
     }
 
     /**
@@ -293,9 +283,7 @@ abstract class TestCase {
      * @throws AssertionFailedException If the provided value is not of type boolean.
      */
     protected function assertIsBool(mixed $value, string $message = ""): void {
-        if(!is_bool($value)) {
-            throw new AssertionFailedException("bool", gettype($value), $message ?: "Failed asserting that value is not bool.");
-        }
+        $this->assertType(AssertType::IS_BOOL, $value, $message);
     }
 
     /**
@@ -306,9 +294,7 @@ abstract class TestCase {
      * @throws AssertionFailedException If the provided value is not callable.
      */
     protected function assertIsCallable(mixed $value, string $message = ""): void {
-        if(!is_callable($value)) {
-            throw new AssertionFailedException("callable", gettype($value), $message ?: "Failed asserting that value is callable.");
-        }
+        $this->assertType(AssertType::IS_CALLABLE, $value, $message);
     }
 
     /**
@@ -319,9 +305,7 @@ abstract class TestCase {
      * @throws AssertionFailedException If the provided value is not iterable.
      */
     protected function assertIsIterable(mixed $value, string $message = ""): void {
-        if(!is_iterable($value)) {
-            throw new AssertionFailedException("iterable", gettype($value), $message ?: "Failed asserting that value is not iterable.");
-        }
+        $this->assertType(AssertType::IS_ITERABLE, $value, $message);
     }
 
     /**
@@ -332,8 +316,23 @@ abstract class TestCase {
      * @throws AssertionFailedException If the provided value is not a resource.
      */
     protected function assertIsResource(mixed $value, string $message = ""): void {
-        if(!is_resource($value)) {
-            throw new AssertionFailedException("resource", gettype($value), $message ?: "Failed asserting that value is not resource.");
+        $this->assertType(AssertType::IS_RESOURCE, $value, $message);
+    }
+
+    /**
+     * Asserts that a value is of a specified type.
+     * @param AssertType $type An object representing the type to check against.
+     * @param mixed $value The value to check for type conformity.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws AssertionFailedException If the provided value does not match the specified type.
+     */
+    private function assertType(AssertType $type, mixed $value, string $message = ""): void {
+        $function = $type->value;
+        $type = str_replace("is_", "", $function);
+
+        if(!function_exists($function) || !$function($value)) {
+            throw new AssertionFailedException($type, gettype($value), $message ?: "Failed asserting that value is of type [{$type}].");
         }
     }
 }
