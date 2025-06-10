@@ -1,0 +1,12 @@
+ArcTest - Command Line Test Runner
+
+Usage:
+  php bin/arctest [options]
+
+Options:
+  --filter=string         Only run test methods that contain this string.
+  --groups=csv            Only run tests marked with #[Group("name")].
+  --format=console|json   Output format (default: console).
+  --verbose               Show full exception traces.
+  --fail-fast             Stop on first test failure.
+  --help                  Show this help screen.

@@ -8,6 +8,12 @@ use ArcTest\Exceptions\SkipTestException;
 use Throwable;
 
 class TestExecutor {
+    /**
+     * Runs a test case method and returns the result.
+     * @param TestCase $test The test case object to run the method on
+     * @param string $method The name of the method to run on the test case
+     * @return TestResult The result of running the test method, indicating pass, fail, or skip
+     */
     public function run(TestCase $test, string $method): TestResult {
         $class = get_class($test);
 

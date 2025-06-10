@@ -64,6 +64,8 @@ class TestRunner {
                     return 1;
                 }
             }
+
+            if($failFast && $summary->hasFailures()) break;
         }
 
         $this->printer->printSummary($summary);

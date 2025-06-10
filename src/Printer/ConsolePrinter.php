@@ -7,20 +7,24 @@ use ArcTest\Core\TestResult;
 use ArcTest\Core\TestSummary;
 use ArcTest\Enum\TestOutcome;
 use ArcTest\Exceptions\AssertionFailedException;
+use ArcTest\Utils\ConsoleFormatter;
+use Override;
 use Throwable;
 
 class ConsolePrinter implements ResultPrinterInterface {
     private bool $verbose;
+    private ConsoleFormatter $formatter;
 
     public function __construct(bool $verbose = false) {
         $this->verbose = $verbose;
+        $this->formatter = new ConsoleFormatter();
     }
 
     /**
      * Start the process. This method initiates the process flow and triggers the beginning of the operation.
      * @return void
      */
-    #[\Override] public function start(): void {
+    #[Override] public function start(): void {
         echo "Running tests..." . PHP_EOL;
     }
 
@@ -29,18 +33,18 @@ class ConsolePrinter implements ResultPrinterInterface {
      * @param TestResult $result The test result object to be printed
      * @return void
      */
-    #[\Override] public function printTestResult(TestResult $result): void {
+    #[Override] public function printTestResult(TestResult $result): void {
         switch($result->outcome) {
             case TestOutcome::PASSED:
-                echo "PASSED: {$result->className}::{$result->method}" . PHP_EOL;
+                echo $this->formatter->green("PASSED:") . " {$result->className}::{$result->method}" . PHP_EOL;
                 break;
             case TestOutcome::SKIPPED:
-                echo "SKIPPED: {$result->className}::{$result->method}";
+                echo $this->formatter->yellow("SKIPPED:") . " {$result->className}::{$result->method}";
                 if(!empty($result->message)) echo " ({$result->message})";
                 echo PHP_EOL;
                 break;
             case TestOutcome::FAILED:
-                echo "FAILED: {$result->className}::{$result->method}";
+                echo $this->formatter->red("FAILED:") . " {$result->className}::{$result->method}";
 
                 if($result->exception instanceof AssertionFailedException) {
                     echo " Expected: " . var_export($result->exception->getExpected(), true) . " => Actual: " . var_export($result->exception->getActual(), true) . PHP_EOL;
@@ -61,11 +65,14 @@ class ConsolePrinter implements ResultPrinterInterface {
      * @param TestSummary $summary The test result object to be summarized
      * @return void
      */
-    #[\Override] public function printSummary(TestSummary $summary): void {
+    #[Override] public function printSummary(TestSummary $summary): void {
         echo PHP_EOL;
         echo "Test run completed!" . PHP_EOL;
         echo PHP_EOL;
         echo "Summary:" . PHP_EOL;
-        echo "Total: {$summary->getTotal()} | Passed: {$summary->getPassed()} | Failed: {$summary->getFailed()} | Skipped: {$summary->getSkipped()}" . PHP_EOL;
+        echo "Total: {$summary->getTotal()} | " .
+            $this->formatter->green("Passed: {$summary->getPassed()}") . " | " .
+            $this->formatter->red("Failed: {$summary->getFailed()}") . " | " .
+            $this->formatter->yellow("Skipped: {$summary->getSkipped()}") . PHP_EOL;
     }
 }
