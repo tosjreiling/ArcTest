@@ -3,6 +3,7 @@
 namespace ArcTest;
 
 use ArcTest\Contracts\ResultPrinterInterface;
+use ArcTest\Contracts\TestListenerInterface;
 use ArcTest\Core\TestDiscovery;
 use ArcTest\Core\TestRunner;
 use ArcTest\Printer\ConsolePrinter;
@@ -14,6 +15,7 @@ use ReflectionException;
  */
 class ArcTest {
     private static array $tests = [];
+    private static array $listeners = [];
 
     /**
      * Registers a test class to be included in the test suite.
@@ -22,6 +24,15 @@ class ArcTest {
      */
     public static function register(string $testClass): void {
         self::$tests[] = $testClass;
+    }
+
+    /**
+     * Adds a new listener to the list of listeners.
+     * @param TestListenerInterface $listener The listener to be added.
+     * @return void
+     */
+    public static function addListener(TestListenerInterface $listener): void {
+        self::$listeners[] = $listener;
     }
 
     /**
@@ -41,6 +52,8 @@ class ArcTest {
         $suite = $discovery->discover(self::$tests, $directory, $filter);
 
         $runner = new TestRunner($printer);
+        foreach(self::$listeners as $listener) $runner->addListener($listener);
+
         return $runner->run($suite, $verbose, $failFast, $filter, $group);
     }
 }

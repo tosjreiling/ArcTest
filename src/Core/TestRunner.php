@@ -3,6 +3,7 @@
 namespace ArcTest\Core;
 
 use ArcTest\Contracts\ResultPrinterInterface;
+use ArcTest\Contracts\TestListenerInterface;
 use ArcTest\Enum\TestOutcome;
 use ReflectionException;
 
@@ -15,6 +16,7 @@ class TestRunner {
     private TestExecutor $executor;
     private TestSelector $selector;
     private TestTracker $tracker;
+    private array $listeners = [];
 
     /**
      * Constructor for initializing the test suite with a ResultPrinterInterface instance
@@ -26,6 +28,15 @@ class TestRunner {
         $this->executor = new TestExecutor();
         $this->selector = new TestSelector();
         $this->tracker = new TestTracker();
+    }
+
+    /**
+     * Adds a listener to the list of listeners.
+     * @param TestListenerInterface $listener The listener to be added.
+     * @return void
+     */
+    public function addListener(TestListenerInterface $listener): void {
+        $this->listeners[] = $listener;
     }
 
     /**
@@ -50,7 +61,12 @@ class TestRunner {
             foreach($methods as $method) {
                 if(!$this->selector->check($instance, $method, $filter, $groups)) continue;
 
+                foreach($this->listeners as $listener) $listener->onTestStart($class, $method);
+
                 $result = $this->executor->run($instance, $method);
+
+                foreach($this->listeners as $listener) $listener->onTestEnd($result);
+
                 $this->tracker->apply($summary, $result);
                 $summary->incrementDuration($result->duration);
                 $this->printer->printTestResult($result);
