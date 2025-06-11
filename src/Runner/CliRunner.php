@@ -3,6 +3,10 @@
 namespace ArcTest\Runner;
 
 use ArcTest\ArcTest;
+use ArcTest\Contracts\ResultPrinterInterface;
+use ArcTest\Enum\PrintFormat;
+use ArcTest\Printer\ConsolePrinter;
+use ArcTest\Printer\JsonPrinter;
 use ReflectionException;
 
 /**
@@ -36,9 +40,21 @@ class CliRunner {
             directory: $directory,
             verbose: $this->args->verbose,
             failFast: $this->args->failFast,
-            format: $this->args->format,
             filter: $this->args->filter,
-            groups: $this->args->groups
+            group: $this->args->groups,
+            printer: $this->resolvePrinter($this->args->format)
         );
+    }
+
+    /**
+     * Resolves and returns the appropriate printer based on the specified format.
+     * @param PrintFormat $format The output format for the printer.
+     * @return ResultPrinterInterface Returns an instance of the printer matching the specified format.
+     */
+    private function resolvePrinter(PrintFormat $format): ResultPrinterInterface {
+        return match($format) {
+            PrintFormat::JSON => new JsonPrinter(),
+            default => new ConsolePrinter()
+        };
     }
 }

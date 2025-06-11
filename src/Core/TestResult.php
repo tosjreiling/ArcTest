@@ -12,22 +12,25 @@ readonly class TestResult {
     public TestOutcome $outcome;
     public string $message;
     public ?Throwable $exception;
+    public float $duration;
 
     /**
-     * Initializes a new instance of the class.
-     * @param string $className The name of the class being tested.
-     * @param string $method The name of the method being tested.
-     * @param TestOutcome $outcome The outcome of the test.
-     * @param string $message A message related to the test (default is an empty string).
-     * @param Throwable|null $exception An optional exception that occurred during the test (default is null).
+     * Constructor for the class.
+     * @param string $className Name of the class.
+     * @param string $method Name of the method.
+     * @param TestOutcome $outcome Outcome of the test.
+     * @param string $message Optional message related to the test.
+     * @param Throwable|null $exception Optional exception related to the test.
+     * @param float $duration Duration of the test in seconds.
      * @return void
      */
-    public function __construct(string $className, string $method, TestOutcome $outcome, string $message = "", ?Throwable $exception = null) {
+    public function __construct(string $className, string $method, TestOutcome $outcome, string $message = "", ?Throwable $exception = null, float $duration = 0.0) {
         $this->className = $className;
         $this->method = $method;
         $this->outcome = $outcome;
         $this->message = $message;
         $this->exception = $exception;
+        $this->duration = $duration;
     }
 
     /**

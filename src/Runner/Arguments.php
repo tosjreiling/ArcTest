@@ -2,6 +2,7 @@
 
 namespace ArcTest\Runner;
 
+use ArcTest\Enum\ArgKey;
 use ArcTest\Enum\PrintFormat;
 
 /**
@@ -56,12 +57,12 @@ readonly class Arguments {
         }
 
         return new self(
-            filter: $parsed["filter"] ?? "",
-            groups: isset($parsed["group"]) ? explode(",", $parsed["group"]) : [],
-            format: PrintFormat::fromString($parsed["format"] ?? ""),
-            verbose: isset($parsed["verbose"]),
-            failFast: isset($parsed["fail-fast"]),
-            help: isset($parsed["help"])
+            filter: $parsed[ArgKey::FILTER] ?? "",
+            groups: isset($parsed[ArgKey::GROUP]) ? explode(",", $parsed[ArgKey::GROUP]) : [],
+            format: PrintFormat::fromString($parsed[ArgKey::FORMAT] ?? ""),
+            verbose: isset($parsed[ArgKey::VERBOSE]),
+            failFast: isset($parsed[ArgKey::FAIL_FAST]),
+            help: isset($parsed[ArgKey::HELP])
         );
     }
 }

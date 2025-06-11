@@ -6,7 +6,7 @@ use ArcTest\Attributes\Group;
 use ArcTest\Core\TestCase;
 use InvalidArgumentException;
 
-class MyFirstTest extends TestCase {
+class AssertTests extends TestCase {
     public function testTrueAssertions(): void {
         $this->assertTrue(true);
     }

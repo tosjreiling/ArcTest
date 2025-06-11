@@ -4,10 +4,7 @@ namespace ArcTest\Core;
 
 use ArcTest\Contracts\ResultPrinterInterface;
 use ArcTest\Enum\TestOutcome;
-use ArcTest\Exceptions\AssertionFailedException;
-use ArcTest\Exceptions\SkipTestException;
 use ReflectionException;
-use Throwable;
 
 /**
  * Represents a test runner that is responsible for executing test suites
@@ -55,6 +52,7 @@ class TestRunner {
 
                 $result = $this->executor->run($instance, $method);
                 $this->tracker->apply($summary, $result);
+                $summary->incrementDuration($result->duration);
                 $this->printer->printTestResult($result);
 
                 $results->add($result);

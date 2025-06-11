@@ -10,6 +10,7 @@ class TestSummary {
     private int $passed = 0;
     private int $failed = 0;
     private int $skipped = 0;
+    private float $duration = 0.0;
 
     /**
      * Increments the total count by 1.
@@ -36,6 +37,13 @@ class TestSummary {
     public function incrementSkipped(): void { $this->skipped++; }
 
     /**
+     * Increments the current duration by the specified amount.
+     * @param float $duration The duration to add.
+     * @return void
+     */
+    public function incrementDuration(float $duration): void { $this->duration += $duration; }
+
+    /**
      * Returns the total count.
      * @return int The total count.
      */
@@ -58,6 +66,12 @@ class TestSummary {
      * @return int The number of skipped items.
      */
     public function getSkipped(): int { return $this->skipped; }
+
+    /**
+     * Retrieves the duration value.
+     * @return float The duration value.
+     */
+    public function getDuration(): float { return $this->duration; }
 
     /**
      * Checks if there are any failures.

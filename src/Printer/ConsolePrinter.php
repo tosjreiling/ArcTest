@@ -36,25 +36,28 @@ class ConsolePrinter implements ResultPrinterInterface {
     #[Override] public function printTestResult(TestResult $result): void {
         switch($result->outcome) {
             case TestOutcome::PASSED:
-                echo $this->formatter->green("PASSED:") . " {$result->className}::{$result->method}" . PHP_EOL;
+                echo $this->formatter->green("PASSED:") . " {$result->className}::{$result->method} (" . number_format($result->duration, 3) . "s)" . PHP_EOL;
                 break;
             case TestOutcome::SKIPPED:
                 echo $this->formatter->yellow("SKIPPED:") . " {$result->className}::{$result->method}";
                 if(!empty($result->message)) echo " ({$result->message})";
+                echo "(" . number_format($result->duration, 3) . "s)";
                 echo PHP_EOL;
                 break;
             case TestOutcome::FAILED:
                 echo $this->formatter->red("FAILED:") . " {$result->className}::{$result->method}";
 
                 if($result->exception instanceof AssertionFailedException) {
-                    echo " Expected: " . var_export($result->exception->getExpected(), true) . " => Actual: " . var_export($result->exception->getActual(), true) . PHP_EOL;
+                    echo " Expected: " . var_export($result->exception->getExpected(), true) . " => Actual: " . var_export($result->exception->getActual(), true);
                 } else if(!empty($result->message)) {
-                    echo " Message: {$result->message}" . PHP_EOL;
+                    echo " Message: {$result->message}";
                 }
 
                 if($this->verbose && $result->exception instanceof Throwable) {
-                    echo $result->exception->getTraceAsString() . PHP_EOL;
+                    echo $result->exception->getTraceAsString();
                 }
+
+                echo " (" . number_format($result->duration, 3) . "s)" . PHP_EOL;
 
                 break;
         }
@@ -73,6 +76,7 @@ class ConsolePrinter implements ResultPrinterInterface {
         echo "Total: {$summary->getTotal()} | " .
             $this->formatter->green("Passed: {$summary->getPassed()}") . " | " .
             $this->formatter->red("Failed: {$summary->getFailed()}") . " | " .
-            $this->formatter->yellow("Skipped: {$summary->getSkipped()}") . PHP_EOL;
+            $this->formatter->yellow("Skipped: {$summary->getSkipped()}") . " | " .
+            "Duration: " . number_format($summary->getDuration(), 3) . "s" . PHP_EOL;
     }
 }

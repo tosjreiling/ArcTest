@@ -18,7 +18,7 @@ class TestSelector {
      */
     public function check(object $testInstance, string $method, string $filter = "", array $groups = []): bool {
         if(!str_starts_with($method, "test")) return false;
-        if(!empty($filter) && !str_contains($method, $filter)) return false;
+        if(!empty($filter) && !str_contains($method, $filter) && !str_contains(get_class($testInstance), $filter)) return false;
         if(!empty($groups) && !$this->methodInGroup($testInstance, $method, $groups)) return false;
 
         return true;
