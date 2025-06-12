@@ -72,6 +72,16 @@ abstract class TestCase {
     }
 
     /**
+     * Triggers a failure with a specified message.
+     * @param string $message An optional message describing the reason for the failure.
+     * @return void
+     * @throws AssertionFailedException Always thrown to indicate a failure.
+     */
+    protected function fail(string $message = "Test Failed"): void {
+        throw new AssertionFailedException("Failure", "Triggered", $message);
+    }
+
+    /**
      * Asserts that a given condition is true. If the condition is false, an exception is thrown with the provided message.
      * @param bool $condition The condition to evaluate as true or false.
      * @param string $message An optional message to include in the exception if the assertion fails.

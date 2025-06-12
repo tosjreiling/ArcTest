@@ -2,6 +2,7 @@
 
 namespace ArcTest\Core;
 
+use ArcTest\Attributes\Depends;
 use ArcTest\Attributes\Group;
 use ReflectionException;
 use ReflectionMethod;

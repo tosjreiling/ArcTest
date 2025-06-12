@@ -16,6 +16,7 @@ class TestRunner {
     private TestExecutor $executor;
     private TestSelector $selector;
     private TestTracker $tracker;
+    private DependencyChecker $checker;
     private array $listeners = [];
 
     /**
@@ -28,6 +29,7 @@ class TestRunner {
         $this->executor = new TestExecutor();
         $this->selector = new TestSelector();
         $this->tracker = new TestTracker();
+        $this->checker = new DependencyChecker();
     }
 
     /**
@@ -63,9 +65,23 @@ class TestRunner {
 
                 foreach($this->listeners as $listener) $listener->onTestStart($class, $method);
 
+                $skipper = $this->checker->skip($instance, $method);
+                if($skipper !== null) {
+                    $this->tracker->apply($summary, $skipper);
+                    $summary->incrementDuration($skipper->duration);
+                    $this->printer->printTestResult($skipper);
+                    $results->add($skipper);
+
+                    foreach($this->listeners as $listener) $listener->onTestEnd($skipper);
+
+                    continue;
+                }
+
                 $result = $this->executor->run($instance, $method);
 
-                foreach($this->listeners as $listener) $listener->onTestEnd($result);
+                if($result->outcome === TestOutcome::PASSED) $this->checker->record($method);
+
+                foreach($this->listeners as $listener) $listener->onTestEnd($skipper);
 
                 $this->tracker->apply($summary, $result);
                 $summary->incrementDuration($result->duration);

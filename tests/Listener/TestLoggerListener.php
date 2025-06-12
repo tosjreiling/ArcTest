@@ -1,6 +1,6 @@
 <?php
 
-namespace ArcTest\Listener;
+namespace Tests\Listener;
 
 use ArcTest\Contracts\TestListenerInterface;
 use ArcTest\Core\TestResult;
@@ -17,7 +17,7 @@ class TestLoggerListener implements TestListenerInterface {
      * @return void
      */
     #[Override] public function onTestStart(string $class, string $method): void {
-        echo "[LOGGER] Start test: {$class}::{$method}" . PHP_EOL;
+        echo "[" . date("Y-m-d H:i:s") . "][LOGGER] :: Start test: {$class}::{$method}" . PHP_EOL;
     }
 
     /**
@@ -27,7 +27,7 @@ class TestLoggerListener implements TestListenerInterface {
      */
     #[Override] public function onTestEnd(TestResult $result): void {
         $duration = number_format($result->duration, 3);
-        echo "[LOGGER] Finished test: {$result->className}::{$result->method} - {$result->outcome->name} ({$duration}s)" . PHP_EOL;
+        echo "[" . date("Y-m-d H:i:s") . "][LOGGER] :: Finished test: {$result->className}::{$result->method} - {$result->outcome->name} ({$duration}s)" . PHP_EOL;
     }
 
     /**
@@ -36,7 +36,7 @@ class TestLoggerListener implements TestListenerInterface {
      * @return void
      */
     #[Override] public function onSuiteStart(TestSuite $suite): void {
-        echo "[LOGGER] Test suite started." . PHP_EOL;
+        echo "[" . date("Y-m-d H:i:s") . "][LOGGER] :: Test suite started." . PHP_EOL;
     }
 
     /**
@@ -44,6 +44,6 @@ class TestLoggerListener implements TestListenerInterface {
      * @param TestSummary $summary Summary containing details about the test suite execution results.
      */
     #[Override] public function onSuiteEnd(TestSummary $summary): void {
-        echo "[LOGGER] Test suite completed in {$summary->getDuration()}s" . PHP_EOL;
+        echo "[" . date("Y-m-d H:i:s") . "][LOGGER] :: Test suite completed in {$summary->getDuration()}s" . PHP_EOL;
     }
 }
