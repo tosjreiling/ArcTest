@@ -5,7 +5,6 @@ namespace ArcTest\Core;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
-use ReflectionMethod;
 
 /**
  * Represents a test suite that manages a collection of classes and provides functionality

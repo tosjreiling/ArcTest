@@ -6,9 +6,9 @@ use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 class Depends {
-    public string $method;
+    public array $methods;
 
-    public function __construct(string $method) {
-        $this->method = $method;
+    public function __construct(string|array $methods) {
+        $this->methods = is_array($methods) ? $methods : [$methods];
     }
 }

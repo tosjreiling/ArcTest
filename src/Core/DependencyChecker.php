@@ -38,7 +38,7 @@ class DependencyChecker {
         foreach($dependencies as $dependency) {
             if(!in_array($dependency, $this->passed, true)) {
                 try {
-                    $testInstance->skip("Dependency not met for {$method}");
+                    $testInstance->skip("Dependency not met: '{$dependency}' for '{$method}'");
                 } catch(SkipTestException $e) {
                     return new TestResult(get_class($testInstance), $method, TestOutcome::SKIPPED, $e->getMessage(), $e);
                 }
@@ -59,7 +59,13 @@ class DependencyChecker {
             $reflection = new ReflectionMethod($testInstance, $method);
             $attributes = $reflection->getAttributes(Depends::class);
 
-            return array_map(fn($attr) => $attr->newInstance()->method, $attributes);
+            $all = [];
+            foreach($attributes as $attr) {
+                $instance = $attr->newInstance();
+                $all = array_merge($all, $instance->methods);
+            }
+
+            return $all;
         } catch(ReflectionException $e) {
             return [];
         }
