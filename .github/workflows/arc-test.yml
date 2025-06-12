@@ -4,7 +4,7 @@ name: Run ArcTest
 on:
   push:
     branches:
-      - main
+      - [master, develop]
   pull_request:
 
 jobs:
