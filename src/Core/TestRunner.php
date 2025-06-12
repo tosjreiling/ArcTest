@@ -56,32 +56,68 @@ class TestRunner {
 
         $this->printer->start();
 
-        foreach($suite->getClasses() as $class) {
-            $instance = new $class();
+        foreach ($suite->getClasses() as $class) {
             $methods = get_class_methods($class);
+            $hasTests = false;
 
-            foreach($methods as $method) {
-                if(!$this->selector->check($instance, $method, $filter, $groups, $excludes)) continue;
+            foreach ($methods as $m) {
+                if ($this->selector->check(new $class(), $m, $filter, $groups, $excludes)) {
+                    $hasTests = true;
+                    break;
+                }
+            }
 
-                foreach($this->listeners as $listener) $listener->onTestStart($class, $method);
+            if (!$hasTests) {
+                continue;
+            }
+
+            // Call beforeAll if defined
+            if (method_exists($class, 'beforeAll')) {
+                $class::beforeAll();
+            }
+
+            foreach ($methods as $method) {
+                if (!$this->selector->check(new $class(), $method, $filter, $groups, $excludes)) {
+                    continue;
+                }
+
+                $instance = new $class();
+
+                foreach ($this->listeners as $listener) {
+                    $listener->onTestStart($class, $method);
+                }
 
                 $skipper = $this->checker->skip($instance, $method);
-                if($skipper !== null) {
+                if ($skipper !== null) {
                     $this->tracker->apply($summary, $skipper);
                     $summary->incrementDuration($skipper->duration);
                     $this->printer->printTestResult($skipper);
                     $results->add($skipper);
 
-                    foreach($this->listeners as $listener) $listener->onTestEnd($skipper);
+                    foreach ($this->listeners as $listener) {
+                        $listener->onTestEnd($skipper);
+                    }
 
                     continue;
                 }
 
+                if (method_exists($instance, 'beforeEach')) {
+                    $instance->beforeEach();
+                }
+
                 $result = $this->executor->run($instance, $method);
 
-                if($result->outcome === TestOutcome::PASSED) $this->checker->record($method);
+                if (method_exists($instance, 'afterEach')) {
+                    $instance->afterEach();
+                }
 
-                foreach($this->listeners as $listener) $listener->onTestEnd($result);
+                if ($result->outcome === TestOutcome::PASSED) {
+                    $this->checker->record($method);
+                }
+
+                foreach ($this->listeners as $listener) {
+                    $listener->onTestEnd($result);
+                }
 
                 $this->tracker->apply($summary, $result);
                 $summary->incrementDuration($result->duration);
@@ -89,13 +125,20 @@ class TestRunner {
 
                 $results->add($result);
 
-                if($failFast && $result->outcome === TestOutcome::FAILED) {
+                if ($failFast && $result->outcome === TestOutcome::FAILED) {
                     $this->printer->printSummary($summary);
                     return 1;
                 }
             }
 
-            if($failFast && $summary->hasFailures()) break;
+            // Call afterAll if defined
+            if (method_exists($class, 'afterAll')) {
+                $class::afterAll();
+            }
+
+            if ($failFast && $summary->hasFailures()) {
+                break;
+            }
         }
 
         $this->printer->printSummary($summary);

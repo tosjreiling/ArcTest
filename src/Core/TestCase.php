@@ -55,6 +55,31 @@ abstract class TestCase {
     }
 
     /**
+     * Executes setup tasks or operations that should occur before all test cases are run.
+     * Typically used to initialize shared resources or configurations.
+     * @return void
+     */
+    public static function beforeAll(): void {}
+
+    /**
+     * Executes a set of actions or cleanup tasks to run after all tests or operations have completed.
+     * @return void
+     */
+    public static function afterAll(): void {}
+
+    /**
+     * Method to set up conditions or initialize resources required before executing each test case.
+     * @return void
+     */
+    public function beforeEach(): void {}
+
+    /**
+     * Executes any finalization or cleanup logic after each test.
+     * @return void
+     */
+    public function afterEach(): void {}
+
+    /**
      * Triggers a failure with a specified message.
      * @param string $message An optional message describing the reason for the failure.
      * @return void
