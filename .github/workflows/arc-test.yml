@@ -27,7 +27,7 @@ jobs:
         run: php bin/arctest --exclude=experimental --format=junit --output=output/report.xml
 
       - name: Upload Test Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: arcunit-report
           path: output/report.xml
