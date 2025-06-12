@@ -18,8 +18,8 @@
     ],
     "require": {
         "php": ">=8.2",
-      "ext-simplexml": "*",
-      "ext-dom": "*"
+        "ext-simplexml": "*",
+        "ext-dom": "*"
     },
     "bin": [
         "bin/arctest"

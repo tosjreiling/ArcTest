@@ -2,6 +2,7 @@
 
 namespace ArcTest\Core;
 
+use ArcTest\Enum\RecordKey;
 use ArcTest\Enum\TestOutcome;
 use ArcTest\Exceptions\AssertionFailedException;
 use Throwable;
@@ -40,25 +41,25 @@ readonly class TestResult {
      */
     public function toArray(bool $verbose = false): array {
         $record = [
-            "class" => $this->className,
-            "method" => $this->method,
-            "outcome" => $this->outcome->value,
-            "message" => $this->message,
-            "exception" => null,
-            "trace" => null,
-            "expected" => null,
-            "actual" => null
+            RecordKey::CLASSNAME->value => $this->className,
+            RecordKey::METHOD->value => $this->method,
+            RecordKey::OUTCOME->value => $this->outcome->value,
+            RecordKey::MESSAGE->value => $this->message,
+            RecordKey::EXCEPTION->value => null,
+            RecordKey::TRACE->value => null,
+            RecordKey::EXPECTED->value => null,
+            RecordKey::ACTUAL->value => null
         ];
 
         if($this->exception instanceof AssertionFailedException) {
-            $record["expected"] = $this->exception->getExpected();
-            $record["actual"] = $this->exception->getActual();
-            $record["message"] = $this->exception->getMessage();
+            $record[RecordKey::EXPECTED->value ] = $this->exception->getExpected();
+            $record[RecordKey::ACTUAL->value ] = $this->exception->getActual();
+            $record[RecordKey::MESSAGE->value ] = $this->exception->getMessage();
         }
 
         if($this->exception instanceof Throwable) {
-            $record["exception"] = $this->exception->getMessage();
-            $record["trace"] = $this->exception->getTraceAsString();
+            $record[RecordKey::EXCEPTION->value ] = $this->exception->getMessage();
+            $record[RecordKey::TRACE->value ] = $this->exception->getTraceAsString();
         }
 
         return $record;

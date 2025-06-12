@@ -5,6 +5,7 @@ namespace ArcTest\Core;
 use ArcTest\Enum\AssertType;
 use ArcTest\Exceptions\AssertionFailedException;
 use ArcTest\Exceptions\SkipTestException;
+use Countable;
 
 /**
  * Abstract class representing a test case structure.
@@ -309,6 +310,19 @@ abstract class TestCase {
      */
     protected function assertIsResource(mixed $value, string $message = ""): void {
         $this->assertType(AssertType::IS_RESOURCE, $value, $message);
+    }
+
+    /**
+     * Asserts that the count of a given value matches the expected count.
+     * @param int $expected The expected count.
+     * @param int|array $value The value to check, either an integer or an array.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws AssertionFailedException If the count does not match the expected value.
+     */
+    protected function assertCount(int $expected, int|array $value, string $message = ""): void {
+        $count = is_array($value) ? count($value) : $value;
+        $this->assertSame($expected, $count, $message);
     }
 
     /**
