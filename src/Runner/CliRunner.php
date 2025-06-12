@@ -56,7 +56,7 @@ class CliRunner {
     private function resolvePrinter(PrintFormat $format): ResultPrinterInterface {
         return match($format) {
             PrintFormat::JSON => new JsonPrinter(),
-            PrintFormat::JUNIT => new JUnitXmlPrinter(),
+            PrintFormat::JUNIT => new JUnitXmlPrinter($this->args->output),
             default => new ConsolePrinter()
         };
     }

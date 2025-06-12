@@ -6,7 +6,9 @@ use ArcTest\Contracts\ResultPrinterInterface;
 use ArcTest\Core\TestResult;
 use ArcTest\Core\TestSummary;
 use ArcTest\Enum\TestOutcome;
+use DOMDocument;
 use Override;
+use RuntimeException;
 use SimpleXMLElement;
 use Throwable;
 
@@ -71,6 +73,20 @@ class JUnitXmlPrinter implements ResultPrinterInterface {
             }
         }
 
-        file_put_contents($this->output, $xml->asXML());
+        if (str_starts_with($this->output, 'php://') === false) {
+            $dir = dirname($this->output);
+            if (!is_dir($dir)) {
+                if (!mkdir($dir, 0777, true) && !is_dir($dir)) {
+                    throw new RuntimeException("Failed to create output directory: $dir");
+                }
+            }
+        }
+
+        $dom = new DomDocument("1.0");
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        $dom->loadXML($xml->asXML());
+
+        file_put_contents($this->output, $dom->saveXML());
     }
 }
