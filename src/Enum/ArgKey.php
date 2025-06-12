@@ -3,12 +3,12 @@
 namespace ArcTest\Enum;
 
 enum ArgKey: string {
-    public const string FILTER = "filter";
-    public const string GROUP = "group";
-    public const string FORMAT = "format";
-    public const string VERBOSE = "verbose";
-    public const string FAIL_FAST = "fail-fast";
-    public const string HELP = "help";
-    public const string OUTPUT = "output";
-    public const string EXCLUDE = "exclude";
+    case FILTER = "filter";
+    case GROUP = "group";
+    case FORMAT = "format";
+    case VERBOSE = "verbose";
+    case FAIL_FAST = "fail-fast";
+    case HELP = "help";
+    case OUTPUT = "output";
+    case EXCLUDE = "exclude";
 }

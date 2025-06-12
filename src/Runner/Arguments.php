@@ -62,14 +62,14 @@ readonly class Arguments {
         }
 
         return new self(
-            filter: $parsed[ArgKey::FILTER] ?? "",
-            groups: isset($parsed[ArgKey::GROUP]) ? explode(",", $parsed[ArgKey::GROUP]) : [],
-            excludes: isset($parsed[ArgKey::EXCLUDE]) ? explode(",", $parsed[ArgKey::EXCLUDE]) : [],
-            format: PrintFormat::fromString($parsed[ArgKey::FORMAT] ?? ""),
-            verbose: isset($parsed[ArgKey::VERBOSE]),
-            failFast: isset($parsed[ArgKey::FAIL_FAST]),
-            help: isset($parsed[ArgKey::HELP]),
-            output: $parsed[ArgKey::OUTPUT] ?? "php://stdout"
+            filter: $parsed[ArgKey::FILTER->value] ?? "",
+            groups: isset($parsed[ArgKey::GROUP->value]) ? explode(",", $parsed[ArgKey::GROUP->value]) : [],
+            excludes: isset($parsed[ArgKey::EXCLUDE->value]) ? explode(",", $parsed[ArgKey::EXCLUDE->value]) : [],
+            format: PrintFormat::fromString($parsed[ArgKey::FORMAT->value] ?? ""),
+            verbose: isset($parsed[ArgKey::VERBOSE->value]),
+            failFast: isset($parsed[ArgKey::FAIL_FAST->value]),
+            help: isset($parsed[ArgKey::HELP->value]),
+            output: $parsed[ArgKey::OUTPUT->value] ?? "php://stdout"
         );
     }
 }
