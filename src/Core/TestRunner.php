@@ -81,7 +81,7 @@ class TestRunner {
 
                 if($result->outcome === TestOutcome::PASSED) $this->checker->record($method);
 
-                foreach($this->listeners as $listener) $listener->onTestEnd($skipper);
+                foreach($this->listeners as $listener) $listener->onTestEnd($result);
 
                 $this->tracker->apply($summary, $result);
                 $summary->incrementDuration($result->duration);

@@ -9,4 +9,5 @@ enum ArgKey: string {
     public const string VERBOSE = "verbose";
     public const string FAIL_FAST = "fail-fast";
     public const string HELP = "help";
+    public const string OUTPUT = "output";
 }

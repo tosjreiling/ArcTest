@@ -15,6 +15,7 @@ readonly class Arguments {
     public bool $verbose;
     public bool $failFast;
     public bool $help;
+    public string $output;
 
     /**
      * Constructor for initializing a new instance with optional parameters.
@@ -26,13 +27,14 @@ readonly class Arguments {
      * @param bool $help The help flag, defaults to false.
      * @return void
      */
-    public function __construct(string $filter = "", array $groups = [], PrintFormat $format = PrintFormat::CONSOLE, bool $verbose = false, bool $failFast = false, bool $help = false) {
+    public function __construct(string $filter = "", array $groups = [], PrintFormat $format = PrintFormat::CONSOLE, bool $verbose = false, bool $failFast = false, bool $help = false, string $output = "php://stdout") {
         $this->filter = $filter;
         $this->groups = $groups;
         $this->format = $format;
         $this->verbose = $verbose;
         $this->failFast = $failFast;
         $this->help = $help;
+        $this->output = $output;
     }
 
     /**
@@ -62,7 +64,8 @@ readonly class Arguments {
             format: PrintFormat::fromString($parsed[ArgKey::FORMAT] ?? ""),
             verbose: isset($parsed[ArgKey::VERBOSE]),
             failFast: isset($parsed[ArgKey::FAIL_FAST]),
-            help: isset($parsed[ArgKey::HELP])
+            help: isset($parsed[ArgKey::HELP]),
+            output: $parsed[ArgKey::OUTPUT] ?? "php://stdout"
         );
     }
 }

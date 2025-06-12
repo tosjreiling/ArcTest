@@ -12,8 +12,6 @@ use ArcTest\Exceptions\SkipTestException;
  * handling test setup and teardown, and asserting conditions during tests.
  */
 abstract class TestCase {
-    private bool $skipped = false;
-    private string $skipMessage = "";
     private ?string $expectedException = null;
 
     /**
@@ -24,22 +22,6 @@ abstract class TestCase {
      */
     public function skip(string $message = "Test skipped"): void {
         throw new SkipTestException($message);
-    }
-
-    /**
-     * Determines whether the current test is marked as skipped.
-     * @return bool True if the test is skipped, otherwise false.
-     */
-    public function isSkipped(): bool {
-        return $this->skipped;
-    }
-
-    /**
-     * Retrieves the skip message for the current test.
-     * @return string The message explaining why the test was skipped.
-     */
-    public function getSkipMessage(): string {
-        return $this->skipMessage;
     }
 
     /**

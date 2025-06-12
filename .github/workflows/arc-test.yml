@@ -1,0 +1,34 @@
+name: ArcTest CI
+
+on:
+  push:
+    branches: [ master, develop ]  # adjust if needed
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Run ArcTest
+        run: |
+          mkdir -p output
+          php bin/arctest --format=junit --output=output/arc-results.xml
+
+      - name: Upload JUnit test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc-junit-results
+          path: output/arc-results.xml

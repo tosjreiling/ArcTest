@@ -17,7 +17,8 @@
         }
     ],
     "require": {
-        "php": ">=8.2"
+        "php": ">=8.2",
+      "ext-simplexml": "*"
     },
     "bin": [
         "bin/arctest"

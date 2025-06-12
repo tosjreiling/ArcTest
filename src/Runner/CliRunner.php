@@ -7,6 +7,7 @@ use ArcTest\Contracts\ResultPrinterInterface;
 use ArcTest\Enum\PrintFormat;
 use ArcTest\Printer\ConsolePrinter;
 use ArcTest\Printer\JsonPrinter;
+use ArcTest\Printer\JUnitXmlPrinter;
 use ReflectionException;
 
 /**
@@ -54,6 +55,7 @@ class CliRunner {
     private function resolvePrinter(PrintFormat $format): ResultPrinterInterface {
         return match($format) {
             PrintFormat::JSON => new JsonPrinter(),
+            PrintFormat::JUNIT => new JUnitXmlPrinter(),
             default => new ConsolePrinter()
         };
     }
