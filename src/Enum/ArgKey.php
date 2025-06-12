@@ -10,4 +10,5 @@ enum ArgKey: string {
     public const string FAIL_FAST = "fail-fast";
     public const string HELP = "help";
     public const string OUTPUT = "output";
+    public const string EXCLUDE = "exclude";
 }

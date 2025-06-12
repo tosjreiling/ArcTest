@@ -43,6 +43,7 @@ class CliRunner {
             failFast: $this->args->failFast,
             filter: $this->args->filter,
             group: $this->args->groups,
+            exclude: $this->args->excludes,
             printer: $this->resolvePrinter($this->args->format)
         );
     }

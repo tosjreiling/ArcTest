@@ -50,7 +50,7 @@ class TestRunner {
      * @return int Returns 1 if there are failures, 0 otherwise.
      * @throws ReflectionException
      */
-    public function run(TestSuite $suite, bool $verbose = false, bool $failFast = false, string $filter = "", array $groups = []): int {
+    public function run(TestSuite $suite, bool $verbose = false, bool $failFast = false, string $filter = "", array $groups = [], array $excludes = []): int {
         $summary = new TestSummary();
         $results = new TestResultCollection();
 
@@ -61,7 +61,7 @@ class TestRunner {
             $methods = get_class_methods($class);
 
             foreach($methods as $method) {
-                if(!$this->selector->check($instance, $method, $filter, $groups)) continue;
+                if(!$this->selector->check($instance, $method, $filter, $groups, $excludes)) continue;
 
                 foreach($this->listeners as $listener) $listener->onTestStart($class, $method);
 

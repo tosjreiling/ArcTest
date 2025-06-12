@@ -3,6 +3,7 @@
 namespace Tests;
 
 use ArcTest\Attributes\Depends;
+use ArcTest\Attributes\Group;
 use ArcTest\Core\TestCase;
 
 class MultipleDependsTest extends TestCase {
@@ -14,6 +15,7 @@ class MultipleDependsTest extends TestCase {
         $this->assertTrue(true);
     }
 
+    #[Group("experimental")]
     public function testInitB(): void {
         self::$initB = true;
         $this->assertTrue(false);

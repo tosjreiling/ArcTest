@@ -47,13 +47,13 @@ class ArcTest {
      * @return int The number of failed tests.
      * @throws ReflectionException
      */
-    public static function run(string $directory, bool $verbose = false, bool $failFast = false, string $filter = "", array $group = [], ResultPrinterInterface $printer = new ConsolePrinter()): int {
+    public static function run(string $directory, bool $verbose = false, bool $failFast = false, string $filter = "", array $group = [], array $exclude = [], ResultPrinterInterface $printer = new ConsolePrinter()): int {
         $discovery = new TestDiscovery();
         $suite = $discovery->discover(self::$tests, $directory, $filter);
 
         $runner = new TestRunner($printer);
         foreach(self::$listeners as $listener) $runner->addListener($listener);
 
-        return $runner->run($suite, $verbose, $failFast, $filter, $group);
+        return $runner->run($suite, $verbose, $failFast, $filter, $group, $exclude);
     }
 }

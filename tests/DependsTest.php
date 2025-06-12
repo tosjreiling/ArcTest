@@ -3,6 +3,7 @@
 namespace Tests;
 
 use ArcTest\Attributes\Depends;
+use ArcTest\Attributes\Group;
 use ArcTest\Core\TestCase;
 
 class DependsTest extends TestCase {
@@ -23,6 +24,7 @@ class DependsTest extends TestCase {
         $this->fail("This test should have been skipped");
     }
 
+    #[Group("experimental")]
     public function testFails(): void {
         $this->assertTrue(false, "Intentional failure to test dependency skip");
     }

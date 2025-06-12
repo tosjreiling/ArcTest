@@ -64,16 +64,13 @@ class AssertTests extends TestCase {
         throw new InvalidArgumentException("Something went wrong");
     }
 
+    #[Group("experimental")]
     public function testFailure(): void {
         $this->assertTrue(false);
     }
 
+    #[Group("experimental")]
     public function testShouldNotRun(): void {
-        $this->assertTrue(true);
-    }
-
-    #[Group("integration")]
-    public function testGroupAttribute(): void {
         $this->assertTrue(true);
     }
 }

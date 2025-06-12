@@ -16,9 +16,10 @@ class TestSelector {
      * @return bool Returns true if the method meets all conditions and belongs to any of the specified groups, false otherwise.
      * @throws ReflectionException
      */
-    public function check(object $testInstance, string $method, string $filter = "", array $groups = []): bool {
+    public function check(object $testInstance, string $method, string $filter = "", array $groups = [], array $excludes = []): bool {
         if(!str_starts_with($method, "test")) return false;
         if(!empty($filter) && !str_contains($method, $filter) && !str_contains(get_class($testInstance), $filter)) return false;
+        if(!empty($excludes) && $this->methodInGroup($testInstance, $method, $excludes)) return false;
         if(!empty($groups) && !$this->methodInGroup($testInstance, $method, $groups)) return false;
 
         return true;

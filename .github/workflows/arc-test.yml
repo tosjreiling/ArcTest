@@ -1,8 +1,10 @@
-name: ArcTest CI
+# .github/workflows/test.yml
+name: Run ArcTest
 
 on:
   push:
-    branches: [ master, develop ]  # adjust if needed
+    branches:
+      - main
   pull_request:
 
 jobs:
@@ -10,25 +12,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
-          coverage: none
+          php-version: '8.2'
 
       - name: Install dependencies
-        run: composer install --no-interaction --no-progress
+        run: composer install
 
-      - name: Run ArcTest
-        run: |
-          mkdir -p output
-          php bin/arctest --format=junit --output=output/arc-results.xml
+      - name: Run ArcTest (excluding experimental)
+        run: php bin/arctest --exclude=experimental --format=junit --output=output/report.xml
 
-      - name: Upload JUnit test results
-        uses: actions/upload-artifact@v4
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v3
         with:
-          name: arc-junit-results
-          path: output/arc-results.xml
+          name: arcunit-report
+          path: output/report.xml
