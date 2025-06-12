@@ -1,6 +1,9 @@
 # Ignore vendor folder (Composer dependencies)
 vendor/
 
+# Ignore output folder
+output/
+
 # Ignore Composer PHAR file if present
 composer.phar
 
