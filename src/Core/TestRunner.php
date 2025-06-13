@@ -20,8 +20,6 @@ class TestRunner {
     private LifeCycleManager $lifecycle;
     private array $listeners = [];
 
-    private const int FAIL_FAST_EXIT_CODE = 2;
-
     /**
      * Constructor for initializing the test suite with a ResultPrinterInterface instance
      * @param ResultPrinterInterface $printer The ResultPrinterInterface instance to handle result printing
@@ -72,7 +70,7 @@ class TestRunner {
                     $instance = new $className();
 
                     if($this->process($instance, $className, $method, $summary, $results, $failFast)) {
-                        return self::FAIL_FAST_EXIT_CODE;
+                        return 2;
                     }
                 }
             } finally {
