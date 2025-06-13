@@ -20,7 +20,7 @@ class TestRunner {
     private LifeCycleManager $lifecycle;
     private array $listeners = [];
 
-    private const FAIL_FAST_EXIT_CODE = 2;
+    private const int FAIL_FAST_EXIT_CODE = 2;
 
     /**
      * Constructor for initializing the test suite with a ResultPrinterInterface instance
