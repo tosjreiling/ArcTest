@@ -26,18 +26,6 @@ abstract class TestCase {
     }
 
     /**
-     * Prepares the environment before executing each test.
-     * @return void
-     */
-    public function setUp(): void {}
-
-    /**
-     * Cleans up the environment after executing each test.
-     * @return void
-     */
-    public function tearDown(): void {}
-
-    /**
      * Sets the expected exception for the next test execution.
      * @param string $exception The name of the exception class that is expected to be thrown.
      * @return void
