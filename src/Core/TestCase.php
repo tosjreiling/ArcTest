@@ -133,6 +133,20 @@ abstract class TestCase {
     }
 
     /**
+     * Asserts that two values are not the same.
+     * @param mixed $expected The expected value for comparison.
+     * @param mixed $actual The actual value to compare against the expected value.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws AssertionFailedException If the expected value is the same as the actual value.
+     */
+    protected function assertNotSame(mixed $expected, mixed $actual, string $message = ""): void {
+        if($expected === $actual) {
+            throw new AssertionFailedException($expected, $actual, $message);
+        }
+    }
+
+    /**
      * Asserts that a value is null.
      * @param mixed $value The value to check.
      * @param string $message An optional message to display if the assertion fails.
