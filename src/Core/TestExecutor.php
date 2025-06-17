@@ -37,10 +37,10 @@ class TestExecutor {
             $test->$method();
 
             if($test->getExpectedException() !== null) {
-                return $this->createTestResult($className, $method, TestOutCome::FAILED, "Expected exception {$test->getExpectedException()} was not thrown", null, $startTime);
+                return $this->createTestResult($className, $method, TestOutCome::FAILED, "Expected exception {$test->getExpectedException()} was not thrown", null, microtime(true) - $startTime);
             }
 
-            return $this->createTestResult($className, $method, TestOutCome::PASSED, "Test passed", null, $startTime);
+            return $this->createTestResult($className, $method, TestOutCome::PASSED, "Test passed", null, microtime(true) - $startTime);
         } catch(Throwable $e) {
             return $this->handleException($test, $method, $className, $e, $startTime);
         } finally {
@@ -76,11 +76,10 @@ class TestExecutor {
      * @param TestOutcome $outcome The outcome of the test (e.g., passed, failed, skipped)
      * @param string $message A message providing details about the test result
      * @param Throwable|null $exception An optional exception thrown during the test
-     * @param float $startTime The start time of the test execution
+     * @param float $duration The start time of the test execution
      * @return TestResult An instance representing the test result, including outcome and execution details
      */
-    private function createTestResult(string $className, string $method, TestOutcome $outcome, string $message, ?Throwable $exception, float $startTime): Testresult {
-        $executionTime = microtime(true) - $startTime;
-        return new TestResult($className, $method, $outcome, $message, $exception, $executionTime);
+    private function createTestResult(string $className, string $method, TestOutcome $outcome, string $message, ?Throwable $exception, float $duration): Testresult {
+        return new TestResult($className, $method, $outcome, $message, $exception, $duration);
     }
 }
