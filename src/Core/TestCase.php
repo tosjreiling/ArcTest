@@ -326,6 +326,21 @@ abstract class TestCase {
     }
 
     /**
+     * Asserts that an object is an instance of the specified class.
+     * @param string $class The fully qualified name of the class to check against.
+     * @param mixed $object The object to verify.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws AssertionFailedException If the object is not an instance of the specified class.
+     */
+    protected function assertInstanceOf(string $class, mixed $object, string $message = ""): void {
+        if(!($object instanceof $class)) {
+            $actual = is_object($object) ? get_class($object) : gettype($object);
+            throw new AssertionFailedException($class, $actual, $message ?: "Failed asserting that object is an instance of [{$class}].");
+        }
+    }
+
+    /**
      * Asserts that the count of a given value matches the expected count.
      * @param int $expected The expected count.
      * @param int|array $value The value to check, either an integer or an array.
