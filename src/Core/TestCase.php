@@ -100,7 +100,7 @@ abstract class TestCase {
      */
     protected function assertFalse(bool $condition, string $message = ""): void {
         if($condition) {
-            throw new AssertionFailedException(false, true, $message ?: "Failed asserting that condition is false.");
+            throw new AssertionFailedException(false, true, $message);
         }
     }
 
@@ -155,7 +155,7 @@ abstract class TestCase {
      */
     protected function assertNull(mixed $value, string $message = ""): void {
         if(!is_null($value)) {
-            throw new AssertionFailedException(null, $value, $message ?: "Failed asserting that value is null.");
+            throw new AssertionFailedException(null, $value, $message);
         }
     }
 

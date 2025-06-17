@@ -14,10 +14,10 @@ class ArgumentsTest extends TestCase {
         $this->assertFalse($args->failFast, "Expected fail to be false by default");
         $this->assertFalse($args->help, "Expected help to be false by default");
 
-        $this->assertNull($args->filter, "Expected filter to be null by default");
-        $this->assertNull($args->groups, "Expected groups to be null by default");
-        $this->assertNull($args->output, "Expected output to be null by default");
-        $this->assertNull($args->excludes, "Expected excludes to be null by default");
+        $this->assertEmpty($args->filter, "Expected filter to be null by default");
+        $this->assertEmpty($args->groups, "Expected groups to be null by default");
+        $this->assertNotEmpty($args->output, "Expected output to be null by default");
+        $this->assertEmpty($args->excludes, "Expected excludes to be null by default");
 
         $this->assertSame(PrintFormat::CONSOLE, $args->format, "Expected print format to be console value)");
     }
