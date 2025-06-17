@@ -154,7 +154,7 @@ abstract class TestCase {
      * @throws AssertionFailedException If the value is not null.
      */
     protected function assertNull(mixed $value, string $message = ""): void {
-        if(is_null($value)) {
+        if(!is_null($value)) {
             throw new AssertionFailedException(null, $value, $message ?: "Failed asserting that value is null.");
         }
     }
@@ -167,8 +167,8 @@ abstract class TestCase {
      * @throws AssertionFailedException If the given value is null.
      */
     protected function assertNotNull(mixed $value, string $message = ""): void {
-        if(!is_null($value)) {
-            throw new AssertionFailedException(null, $value, $message ?: "Failed asserting that value is not null.");
+        if(is_null($value)) {
+            throw new AssertionFailedException("not null", $value, $message ?: "Failed asserting that value is not null.");
         }
     }
 
