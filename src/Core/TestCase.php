@@ -119,6 +119,20 @@ abstract class TestCase {
     }
 
     /**
+     * Asserts that two values are not equal.
+     * @param mixed $expected The value that the actual value is expected not to equal.
+     * @param mixed $actual The value to compare against the expected value.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws AssertionFailedException If the expected and actual values are equal.
+     */
+    protected function assertNotEquals(mixed $expected, mixed $actual, string $message = ""): void {
+        if($expected == $actual) {
+            throw new AssertionFailedException($expected, $actual, $message);
+        }
+    }
+
+    /**
      * Asserts that a value is greater than an expected value.
      * @param mixed $expected The value that the actual value is expected to be greater than.
      * @param mixed $actual The value to be evaluated.
