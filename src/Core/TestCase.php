@@ -355,6 +355,20 @@ abstract class TestCase {
     }
 
     /**
+     * Asserts that an array contains the specified key.
+     * @param mixed $key The key to check for in the array.
+     * @param array $array The array in which to search for the key.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws AssertionFailedException If the array does not contain the specified key.
+     */
+    protected function assertArrayHasKey(mixed $key, array $array, string $message = ""): void {
+        if(!array_key_exists($key, $array)) {
+            throw new AssertionFailedException($key, $array, $message ?: "Failed asserting that array has key [{$key}].");
+        }
+    }
+
+    /**
      * Asserts that the count of a given value matches the expected count.
      * @param int $expected The expected count.
      * @param int|array $value The value to check, either an integer or an array.
