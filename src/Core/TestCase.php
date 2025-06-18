@@ -127,7 +127,7 @@ abstract class TestCase {
      * @throws AssertionFailedException If the actual value is less than the expected value.
      */
     protected function assertGreaterThanOrEqual(mixed $expected, mixed $actual, string $message = ""): void {
-        if($expected < $actual) {
+        if($actual < $expected) {
             throw new AssertionFailedException($expected, $actual, $message);
         }
     }
@@ -141,7 +141,7 @@ abstract class TestCase {
      * @throws AssertionFailedException If the actual value is greater than the expected value.
      */
     protected function assertLessThanOrEqual(mixed $expected, mixed $actual, string $message = ""): void {
-        if($expected > $actual) {
+        if($actual > $expected) {
             throw new AssertionFailedException($expected, $actual, $message);
         }
     }
