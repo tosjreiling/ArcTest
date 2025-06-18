@@ -119,6 +119,20 @@ abstract class TestCase {
     }
 
     /**
+     * Asserts that a value is greater than an expected value.
+     * @param mixed $expected The value that the actual value is expected to be greater than.
+     * @param mixed $actual The value to be evaluated.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws AssertionFailedException If the actual value is not greater than the expected value.
+     */
+    protected function assertGreaterThan(mixed $expected, mixed $actual, string $message = ""): void {
+        if($actual <= $expected) {
+            throw new AssertionFailedException($expected, $actual, $message);
+        }
+    }
+
+    /**
      * Asserts that a value is greater than or equal to another value.
      * @param mixed $expected The expected value to compare against.
      * @param mixed $actual The actual value to compare.
@@ -128,6 +142,20 @@ abstract class TestCase {
      */
     protected function assertGreaterThanOrEqual(mixed $expected, mixed $actual, string $message = ""): void {
         if($actual < $expected) {
+            throw new AssertionFailedException($expected, $actual, $message);
+        }
+    }
+
+    /**
+     * Asserts that a value is less than the expected value.
+     * @param mixed $expected The value that the actual value should be less than.
+     * @param mixed $actual The value to test.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws AssertionFailedException If the actual value is not less than the expected value.
+     */
+    protected function assertLessThan(mixed $expected, mixed $actual, string $message = ""): void {
+        if($actual >= $expected) {
             throw new AssertionFailedException($expected, $actual, $message);
         }
     }
