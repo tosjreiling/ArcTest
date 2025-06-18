@@ -119,6 +119,34 @@ abstract class TestCase {
     }
 
     /**
+     * Asserts that a value is greater than or equal to another value.
+     * @param mixed $expected The expected value to compare against.
+     * @param mixed $actual The actual value to compare.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws AssertionFailedException If the actual value is less than the expected value.
+     */
+    protected function assertGreaterThanOrEqual(mixed $expected, mixed $actual, string $message = ""): void {
+        if($expected < $actual) {
+            throw new AssertionFailedException($expected, $actual, $message);
+        }
+    }
+
+    /**
+     * Asserts that a value is less than or equal to an expected value.
+     * @param mixed $expected The expected value to compare against.
+     * @param mixed $actual The actual value to be compared.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws AssertionFailedException If the actual value is greater than the expected value.
+     */
+    protected function assertLessThanOrEqual(mixed $expected, mixed $actual, string $message = ""): void {
+        if($expected > $actual) {
+            throw new AssertionFailedException($expected, $actual, $message);
+        }
+    }
+
+    /**
      * Asserts that two values are identical.
      * @param mixed $expected The expected value.
      * @param mixed $actual The actual value to compare against the expected value.
