@@ -269,6 +269,20 @@ abstract class TestCase {
     }
 
     /**
+     * Asserts that an array contains a specific value.
+     * @param mixed $needle The value to search for in the array.
+     * @param array $hack The array in which to search for the value.
+     * @param string $message An optional message to display if the assertion fails.
+     * @return void
+     * @throws AssertionFailedException If the array does not contain the specified value.
+     */
+    protected function assertArrayContains(mixed $needle, array $hack, string $message = ""): void {
+        if(!in_array($needle, $hack, true)) {
+            throw new AssertionFailedException($needle, $hack, $message ?: "Failed asserting that array contains [{$needle}].");
+        }
+    }
+
+    /**
      * Asserts that a string contains another string.
      * @param string $needle The substring to search for within the haystack.
      * @param string $haystack The string to search within.
