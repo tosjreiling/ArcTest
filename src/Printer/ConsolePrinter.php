@@ -25,7 +25,7 @@ class ConsolePrinter implements ResultPrinterInterface {
      * @return void
      */
     #[Override] public function start(): void {
-        echo "Running tests..." . PHP_EOL;
+        echo "Running tests on " . date("d-m-Y H:i:s") . "..." . PHP_EOL . PHP_EOL;
     }
 
     /**
