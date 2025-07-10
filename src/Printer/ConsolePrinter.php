@@ -26,7 +26,7 @@ class ConsolePrinter implements ResultPrinterInterface {
      */
     #[Override] public function start(): void {
         date_default_timezone_set("Europe/Brussels");
-        echo "####################################################" . PHP_EOL;
+        echo "================================================================================" . PHP_EOL;
         echo "Running tests on " . date("d-m-Y H:i:s") . "..." . PHP_EOL . PHP_EOL;
     }
 
@@ -80,6 +80,6 @@ class ConsolePrinter implements ResultPrinterInterface {
             $this->formatter->red("Failed: {$summary->getFailed()}") . " | " .
             $this->formatter->yellow("Skipped: {$summary->getSkipped()}") . " | " .
             "Duration: " . number_format($summary->getDuration(), 3) . "s" . PHP_EOL;
-        echo "####################################################" . PHP_EOL;
+        echo "================================================================================" . PHP_EOL;
     }
 }
