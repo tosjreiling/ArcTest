@@ -296,6 +296,12 @@ abstract class TestCase {
         }
     }
 
+    protected function assertStringNotContains(string $needle, string $haystack, string $message = ""): void {
+        if(str_contains($haystack, $needle)) {
+            throw new AssertionFailedException($needle, $haystack, $message ?: "Failed asserting that string does not contain [{$needle}] in [{$haystack}].");
+        }
+    }
+
     /**
      * Asserts that a string starts with a specific prefix.
      * @param string $prefix The prefix to check for at the start of the string.
